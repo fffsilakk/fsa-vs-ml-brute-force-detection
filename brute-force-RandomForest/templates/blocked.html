@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Akses Ditolak - Random Forest Brute Force Detection</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <div
+        class="blocked-box"
+        style="
+          border: 1px solid rgba(239, 68, 68, 0.4);
+          box-shadow: 0 10px 40px rgba(239, 68, 68, 0.25);
+        "
+      >
+        <div class="blocked-icon">🚫</div>
+
+        <h1>Akses Diblokir (Random Forest)</h1>
+
+        <p class="blocked-message">
+          {{ message if message else 'Aktivitas anomali terdeteksi. Berdasarkan
+          voting mayoritas sub-pohon, akses Anda ditolak sementara.' }}
+        </p>
+
+        <div
+          class="state-indicator"
+          style="max-width: 250px; margin: 20px auto"
+        >
+          <div class="state-badge state-blocked active" style="width: 100%">
+            BLOCKED BY ENSEMBLE
+          </div>
+        </div>
+
+        {% if blocked_until %}
+        <div class="countdown">
+          <p style="margin-bottom: 15px; color: #94a3b8">
+            Struktur model akan mereset parameter penalti pada:
+          </p>
+          <div id="countdownTimer" data-until="{{ blocked_until }}">
+            <span id="minutes">05</span>:<span id="seconds">00</span>
+          </div>
+        </div>
+        {% endif %}
+
+        <div
+          class="ensemble-info"
+          style="
+            text-align: left;
+            margin-top: 25px;
+            background: #0f172a;
+            padding: 20px;
+            border-radius: 8px;
+          "
+        >
+          <h3 style="margin-bottom: 15px; font-size: 15px; color: #fff">
+            💡 Langkah Mitigasi Keamanan:
+          </h3>
+          <div style="display: flex; flex-direction: column; gap: 12px">
+            <div
+              style="
+                display: flex;
+                gap: 10px;
+                padding: 10px;
+                background: #1e293b;
+                border-radius: 5px;
+              "
+            >
+              <span style="color: #6366f1; font-weight: bold">1.</span>
+              <div>
+                <strong style="font-size: 13px; color: #fff"
+                  >Tunggu Hingga Masa Karantina Selesai</strong
+                >
+                <p style="font-size: 12px; color: #94a3b8; margin: 3px 0 0 0">
+                  Model memblokir request IP/Username selama 5 menit demi
+                  menghentikan laju serangan brute force otomatis.
+                </p>
+              </div>
+            </div>
+            <div
+              style="
+                display: flex;
+                gap: 10px;
+                padding: 10px;
+                background: #1e293b;
+                border-radius: 5px;
+              "
+            >
+              <span style="color: #6366f1; font-weight: bold">2.</span>
+              <div>
+                <strong style="font-size: 13px; color: #fff"
+                  >Gunakan Kredensial Otentik</strong
+                >
+                <p style="font-size: 12px; color: #94a3b8; margin: 3px 0 0 0">
+                  Jika Anda memasukkan password yang valid dan terdaftar, hak
+                  akses jaringan akan dipulihkan secara instan.
+                </p>
+              </div>
+            </div>
+            <div
+              style="
+                display: flex;
+                gap: 10px;
+                padding: 10px;
+                background: #1e293b;
+                border-radius: 5px;
+              "
+            >
+              <span style="color: #6366f1; font-weight: bold">3.</span>
+              <div>
+                <strong style="font-size: 13px; color: #fff"
+                  >Koordinasi dengan Administrator</strong
+                >
+                <p style="font-size: 12px; color: #94a3b8; margin: 3px 0 0 0">
+                  Hubungi admin host jika akun Anda terkunci akibat lupa kata
+                  sandi bawaan.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <a href="{{ url_for('login') }}" class="btn-back">
+          ← Kembali ke Login
+        </a>
+      </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+  </body>
+</html>

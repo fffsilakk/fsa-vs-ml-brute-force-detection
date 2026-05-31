@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Akses Ditolak - Decision Tree Brute Force Detection</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <div class="blocked-box">
+        <div class="blocked-icon">🚫</div>
+
+        <h1>Akses Diblokir (Decision Tree)</h1>
+
+        <p class="blocked-message">
+          {{ message if message else 'Aktivitas Anda diklasifikasikan sebagai
+          brute force oleh model Machine Learning.' }}
+        </p>
+
+        <div
+          class="state-indicator"
+          style="max-width: 250px; margin: 20px auto"
+        >
+          <div class="state-badge state-blocked active" style="width: 100%">
+            BLOCKED BY MODEL
+          </div>
+        </div>
+
+        {% if blocked_until %}
+        <div class="countdown">
+          <p style="margin-bottom: 15px; color: #94a3b8">
+            Sistem akan mengevaluasi ulang status pada:
+          </p>
+          <div id="countdownTimer" data-until="{{ blocked_until }}">
+            <span id="minutes">05</span>:<span id="seconds">00</span>
+          </div>
+        </div>
+        {% endif %}
+
+        <div
+          class="detector-info"
+          style="
+            text-align: left;
+            margin-top: 25px;
+            background: #0f172a;
+            padding: 20px;
+            border-radius: 8px;
+          "
+        >
+          <h3 style="margin-bottom: 15px; font-size: 15px; color: #fff">
+            💡 Apa yang bisa Anda lakukan?
+          </h3>
+          <div style="display: flex; flex-direction: column; gap: 12px">
+            <div
+              style="
+                display: flex;
+                gap: 10px;
+                padding: 10px;
+                background: #1e293b;
+                border-radius: 5px;
+              "
+            >
+              <span style="color: #6366f1; font-weight: bold">1.</span>
+              <div>
+                <strong style="font-size: 13px; color: #fff"
+                  >Tunggu hingga cool-down berakhir</strong
+                >
+                <p style="font-size: 12px; color: #94a3b8; margin: 3px 0 0 0">
+                  Model Decision Tree membatasi interval request selama 5 menit
+                  demi keamanan host.
+                </p>
+              </div>
+            </div>
+            <div
+              style="
+                display: flex;
+                gap: 10px;
+                padding: 10px;
+                background: #1e293b;
+                border-radius: 5px;
+              "
+            >
+              <span style="color: #6366f1; font-weight: bold">2.</span>
+              <div>
+                <strong style="font-size: 13px; color: #fff"
+                  >Gunakan Kredensial Valid</strong
+                >
+                <p style="font-size: 12px; color: #94a3b8; margin: 3px 0 0 0">
+                  Jika Anda memasukkan password yang benar, sistem klasifikasi
+                  akan langsung mengizinkan akses.
+                </p>
+              </div>
+            </div>
+            <div
+              style="
+                display: flex;
+                gap: 10px;
+                padding: 10px;
+                background: #1e293b;
+                border-radius: 5px;
+              "
+            >
+              <span style="color: #6366f1; font-weight: bold">3.</span>
+              <div>
+                <strong style="font-size: 13px; color: #fff"
+                  >Hubungi Administrator</strong
+                >
+                <p style="font-size: 12px; color: #94a3b8; margin: 3px 0 0 0">
+                  Minta intervensi admin jika Anda memerlukan bantuan reset
+                  token/password.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <a href="{{ url_for('login') }}" class="btn-back">
+          ← Kembali ke Login
+        </a>
+      </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+  </body>
+</html>

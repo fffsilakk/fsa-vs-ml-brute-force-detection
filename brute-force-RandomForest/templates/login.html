@@ -1,0 +1,455 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - Random Forest Brute Force Detection</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+  </head>
+  <body class="login-body">
+    <div class="login-grid-container">
+      <div class="login-left">
+        <div class="login-section">
+          <div class="login-header">
+            <div class="icon-shield">🌲🌳🌲</div>
+            <h1>Random Forest Brute Force Detection</h1>
+            <p class="subtitle">Sistem Keamanan Login (Ensemble Learning)</p>
+          </div>
+
+          <div class="state-indicator">
+            <p class="indicator-label">Status Kolektif Ensemble:</p>
+            <div class="state-info">
+              <div
+                class="state-badge state-normal {% if not state or state == 'normal' %}active{% endif %}"
+              >
+                Normal
+              </div>
+              <div
+                class="state-badge state-suspicious {% if state == 'suspicious' %}active{% endif %}"
+              >
+                Suspicious
+              </div>
+              <div
+                class="state-badge state-blocked {% if state == 'blocked' %}active{% endif %}"
+              >
+                Blocked
+              </div>
+            </div>
+          </div>
+
+          {% if error %}
+          <div class="alert alert-error">{{ error }}</div>
+          {% endif %} {% if state == 'suspicious' and failed_attempts and
+          remaining_attempts %}
+          <div class="alert alert-suspicious">
+            ⚠️ {{ failed_attempts }} kegagalan dievaluasi oleh beberapa
+            subsistem. {{ remaining_attempts }} tersisa.
+          </div>
+          {% endif %} {% if unblocked %}
+          <div class="alert alert-success">
+            ✅ Otentikasi Valid! Struktur ensemble mereset bobot penalti.
+          </div>
+          {% endif %}
+
+          <form method="POST" action="{{ url_for('login') }}">
+            <div class="form-group">
+              <label>Username</label>
+              <div class="input-icon">
+                <input
+                  type="text"
+                  name="username"
+                  placeholder="Masukkan username"
+                  required
+                  autofocus
+                />
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Password</label>
+              <div class="input-icon">
+                <input
+                  type="password"
+                  name="password"
+                  placeholder="Masukkan password"
+                  required
+                />
+              </div>
+            </div>
+            <button type="submit" class="btn-login">
+              Evaluasi dengan Random Forest
+            </button>
+          </form>
+        </div>
+
+        <div class="demo-section">
+          <div class="demo-info">
+            <p class="demo-title">🔑 Demo Credentials</p>
+            <div class="credential-item">
+              <span class="credential-label">Username:</span>
+              <code>admin</code>
+            </div>
+            <div class="credential-item">
+              <span class="credential-label">Password:</span>
+              <code>admin123</code>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="diagram-section">
+        <div class="fsa-diagram">
+          <h3>📊 Struktur Model Prediksi Kolektif Random Forest</h3>
+          <svg
+            class="diagram-svg"
+            viewBox="0 0 600 400"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <defs>
+              <pattern
+                id="grid"
+                width="20"
+                height="20"
+                patternUnits="userSpaceOnUse"
+              >
+                <path
+                  d="M 20 0 L 0 0 0 20"
+                  fill="none"
+                  stroke="#2d3748"
+                  stroke-width="0.5"
+                  opacity="0.2"
+                />
+              </pattern>
+              <marker
+                id="arrowhead"
+                markerWidth="8"
+                markerHeight="8"
+                refX="7"
+                refY="3"
+                orient="auto"
+              >
+                <polygon points="0 0, 8 3, 0 6" fill="#94a3b8" />
+              </marker>
+            </defs>
+            <rect width="600" height="400" fill="url(#grid)" />
+
+            <rect
+              x="210"
+              y="20"
+              width="180"
+              height="40"
+              rx="5"
+              fill="#1e293b"
+              stroke="#3b82f6"
+              stroke-width="2"
+            />
+            <text
+              x="300"
+              y="45"
+              text-anchor="middle"
+              fill="#fff"
+              font-size="12"
+              font-weight="bold"
+            >
+              Input: Log Akses Real-Time
+            </text>
+
+            <line
+              x1="240"
+              y1="60"
+              x2="130"
+              y2="110"
+              stroke="#94a3b8"
+              stroke-width="1.5"
+              marker-end="url(#arrowhead)"
+            />
+            <line
+              x1="300"
+              y1="60"
+              x2="300"
+              y2="110"
+              stroke="#94a3b8"
+              stroke-width="1.5"
+              marker-end="url(#arrowhead)"
+            />
+            <line
+              x1="360"
+              y1="60"
+              x2="470"
+              y2="110"
+              stroke="#94a3b8"
+              stroke-width="1.5"
+              marker-end="url(#arrowhead)"
+            />
+
+            <rect
+              x="50"
+              y="110"
+              width="140"
+              height="35"
+              rx="4"
+              fill="#0f172a"
+              stroke="#10b981"
+              stroke-width="1.5"
+            />
+            <text
+              x="120"
+              y="132"
+              text-anchor="middle"
+              fill="#34d399"
+              font-size="11"
+              font-weight="bold"
+            >
+              Decision Tree #1
+            </text>
+            <line
+              x1="120"
+              y1="145"
+              x2="120"
+              y2="190"
+              stroke="#64748b"
+              stroke-width="1"
+              marker-end="url(#arrowhead)"
+            />
+            <rect
+              x="65"
+              y="190"
+              width="110"
+              height="25"
+              rx="3"
+              fill="#1e293b"
+              stroke="#64748b"
+              stroke-width="1"
+            />
+            <text
+              x="120"
+              y="206"
+              text-anchor="middle"
+              fill="#94a3b8"
+              font-size="10"
+            >
+              Output: Blocked
+            </text>
+
+            <rect
+              x="230"
+              y="110"
+              width="140"
+              height="35"
+              rx="4"
+              fill="#0f172a"
+              stroke="#10b981"
+              stroke-width="1.5"
+            />
+            <text
+              x="300"
+              y="132"
+              text-anchor="middle"
+              fill="#34d399"
+              font-size="11"
+              font-weight="bold"
+            >
+              Decision Tree #2
+            </text>
+            <line
+              x1="300"
+              y1="145"
+              x2="300"
+              y2="190"
+              stroke="#64748b"
+              stroke-width="1"
+              marker-end="url(#arrowhead)"
+            />
+            <rect
+              x="245"
+              y="190"
+              width="110"
+              height="25"
+              rx="3"
+              fill="#1e293b"
+              stroke="#64748b"
+              stroke-width="1"
+            />
+            <text
+              x="300"
+              y="206"
+              text-anchor="middle"
+              fill="#94a3b8"
+              font-size="10"
+            >
+              Output: Blocked
+            </text>
+
+            <rect
+              x="410"
+              y="110"
+              width="140"
+              height="35"
+              rx="4"
+              fill="#0f172a"
+              stroke="#10b981"
+              stroke-width="1.5"
+            />
+            <text
+              x="480"
+              y="132"
+              text-anchor="middle"
+              fill="#34d399"
+              font-size="11"
+              font-weight="bold"
+            >
+              Decision Tree #3
+            </text>
+            <line
+              x1="480"
+              y1="145"
+              x2="480"
+              y2="190"
+              stroke="#64748b"
+              stroke-width="1"
+              marker-end="url(#arrowhead)"
+            />
+            <rect
+              x="425"
+              y="190"
+              width="110"
+              height="25"
+              rx="3"
+              fill="#1e293b"
+              stroke="#64748b"
+              stroke-width="1"
+            />
+            <text
+              x="480"
+              y="206"
+              text-anchor="middle"
+              fill="#94a3b8"
+              font-size="10"
+            >
+              Output: Suspicious
+            </text>
+
+            <line
+              x1="120"
+              y1="215"
+              x2="230"
+              y2="265"
+              stroke="#94a3b8"
+              stroke-width="1.5"
+              marker-end="url(#arrowhead)"
+            />
+            <line
+              x1="300"
+              y1="215"
+              x2="300"
+              y2="255"
+              stroke="#94a3b8"
+              stroke-width="1.5"
+              marker-end="url(#arrowhead)"
+            />
+            <line
+              x1="480"
+              y1="215"
+              x2="370"
+              y2="265"
+              stroke="#94a3b8"
+              stroke-width="1.5"
+              marker-end="url(#arrowhead)"
+            />
+
+            <rect
+              x="180"
+              y="260"
+              width="240"
+              height="45"
+              rx="5"
+              fill="#1e293b"
+              stroke="#f59e0b"
+              stroke-width="2"
+            />
+            <text
+              x="300"
+              y="287"
+              text-anchor="middle"
+              fill="#fcd34d"
+              font-size="12"
+              font-weight="bold"
+            >
+              Mekanisme: Majority Voting
+            </text>
+
+            <line
+              x1="300"
+              y1="305"
+              x2="300"
+              y2="335"
+              stroke="#94a3b8"
+              stroke-width="2"
+              marker-end="url(#arrowhead)"
+            />
+
+            <rect
+              x="210"
+              y="340"
+              width="180"
+              height="40"
+              rx="20"
+              fill="#ef4444"
+            />
+            <text
+              x="300"
+              y="364"
+              text-anchor="middle"
+              fill="#fff"
+              font-size="12"
+              font-weight="bold"
+            >
+              Hasil Akhir: BLOCKED
+            </text>
+          </svg>
+        </div>
+
+        <div class="fsa-info">
+          <h3>📋 Cara Kerja Ensemble Learning</h3>
+          <div class="fsa-steps">
+            <div class="fsa-step">
+              <span class="step-number">1</span>
+              <div class="step-content">
+                <strong>Bootstrap Aggregating</strong>
+                <p>
+                  Data aktivitas login didistribusikan secara acak ke berbagai
+                  subsistem internal pembuat keputusan.
+                </p>
+              </div>
+            </div>
+            <div class="fsa-step">
+              <span class="step-number">2</span>
+              <div class="step-content">
+                <strong>Independent Parallel Classification</strong>
+                <p>
+                  Setiap sub-pohon (Decision Tree) memproses dan mengeluarkan
+                  prediksi klasifikasinya sendiri secara terpisah.
+                </p>
+              </div>
+            </div>
+            <div class="fsa-step">
+              <span class="step-number">3</span>
+              <div class="step-content">
+                <strong>Majority Voting</strong>
+                <p>
+                  Sistem mengambil keputusan akhir keamanan berdasarkan suara
+                  terbanyak dari kumpulan sub-pohon untuk menghindari kesalahan
+                  prediksi tunggal.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+  </body>
+</html>

@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - FSA Brute Force Detection</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+  </head>
+  <body class="login-body">
+    <div class="login-grid-container">
+      <!-- KOLOM KIRI -->
+      <div class="login-left">
+        <!-- Login Form -->
+        <div class="login-section">
+          <div class="login-header">
+            <div class="icon-shield">🛡️</div>
+            <h1>FSA Brute Force Detection</h1>
+            <p class="subtitle">Sistem Keamanan Login</p>
+          </div>
+
+          <div class="state-indicator">
+            <p class="indicator-label">Status:</p>
+            <div class="state-info">
+              <div
+                class="state-badge state-normal {% if not state or state == 'normal' %}active{% endif %}"
+              >
+                Normal
+              </div>
+              <div
+                class="state-badge state-suspicious {% if state == 'suspicious' %}active{% endif %}"
+              >
+                Suspicious
+              </div>
+              <div
+                class="state-badge state-blocked {% if state == 'blocked' %}active{% endif %}"
+              >
+                Blocked
+              </div>
+            </div>
+          </div>
+
+          {% if error %}
+          <div class="alert alert-error">{{ error }}</div>
+          {% endif %} {% if state == 'suspicious' and failed_attempts and
+          remaining_attempts %}
+          <div class="alert alert-suspicious">
+            ⚠️ {{ failed_attempts }} percobaan gagal. {{ remaining_attempts }}
+            tersisa.
+          </div>
+          {% endif %} {% if unblocked %}
+          <div class="alert alert-success">
+            ✅ Login berhasil! Akun/IP Anda telah di-unblock.
+          </div>
+          {% endif %}
+
+          <form method="POST" action="{{ url_for('login') }}">
+            <div class="form-group">
+              <label>Username</label>
+              <div class="input-icon">
+                <input
+                  type="text"
+                  name="username"
+                  placeholder="Masukkan username"
+                  required
+                  autofocus
+                />
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Password</label>
+              <div class="input-icon">
+                <input
+                  type="password"
+                  name="password"
+                  placeholder="Masukkan password"
+                  required
+                />
+              </div>
+            </div>
+            <button type="submit" class="btn-login">Login</button>
+          </form>
+        </div>
+
+        <!-- Demo -->
+        <div class="demo-section">
+          <div class="demo-info">
+            <p class="demo-title">🔑 Demo Credentials</p>
+            <div class="credential-item">
+              <span class="credential-label">Username:</span>
+              <code>admin</code>
+            </div>
+            <div class="credential-item">
+              <span class="credential-label">Password:</span>
+              <code>admin123</code>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- KOLOM KANAN - DIAGRAM SESUAI FOTO -->
+      <div class="diagram-section">
+        <div class="fsa-diagram">
+          <h3>🔄 Diagram State Transition Model FSA</h3>
+          <svg
+            class="diagram-svg"
+            viewBox="0 0 600 400"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <!-- Grid Background -->
+            <defs>
+              <pattern
+                id="grid"
+                width="20"
+                height="20"
+                patternUnits="userSpaceOnUse"
+              >
+                <path
+                  d="M 20 0 L 0 0 0 20"
+                  fill="none"
+                  stroke="#2d3748"
+                  stroke-width="0.5"
+                  opacity="0.2"
+                />
+              </pattern>
+              <marker
+                id="arrowhead"
+                markerWidth="10"
+                markerHeight="10"
+                refX="9"
+                refY="3"
+                orient="auto"
+              >
+                <polygon points="0 0, 10 3, 0 6" fill="#94a3b8" />
+              </marker>
+            </defs>
+            <rect width="600" height="400" fill="url(#grid)" />
+
+            <!-- NORMAL State -->
+            <circle
+              cx="100"
+              cy="70"
+              r="38"
+              fill="#1e293b"
+              stroke="#10b981"
+              stroke-width="3"
+            />
+            <text
+              x="100"
+              y="77"
+              text-anchor="middle"
+              fill="#10b981"
+              font-size="14"
+              font-weight="bold"
+            >
+              NORMAL
+            </text>
+
+            <!-- AUTH State -->
+            <circle
+              cx="280"
+              cy="70"
+              r="38"
+              fill="#1e293b"
+              stroke="#6366f1"
+              stroke-width="3"
+            />
+            <text
+              x="280"
+              y="77"
+              text-anchor="middle"
+              fill="#6366f1"
+              font-size="14"
+              font-weight="bold"
+            >
+              AUTH
+            </text>
+
+            <!-- SUCCESS State (Double Circle) -->
+            <circle
+              cx="460"
+              cy="70"
+              r="38"
+              fill="#1e293b"
+              stroke="#10b981"
+              stroke-width="3"
+            />
+            <circle
+              cx="460"
+              cy="70"
+              r="45"
+              fill="none"
+              stroke="#10b981"
+              stroke-width="2"
+            />
+            <text
+              x="460"
+              y="77"
+              text-anchor="middle"
+              fill="#10b981"
+              font-size="13"
+              font-weight="bold"
+            >
+              SUCCESS
+            </text>
+
+            <!-- SUSPICIOUS State -->
+            <circle
+              cx="300"
+              cy="200"
+              r="45"
+              fill="#1e293b"
+              stroke="#f59e0b"
+              stroke-width="3"
+            />
+            <text
+              x="300"
+              y="207"
+              text-anchor="middle"
+              fill="#f59e0b"
+              font-size="12"
+              font-weight="bold"
+            >
+              SUSPICIOUS
+            </text>
+
+            <!-- BLOCKED State (Double Circle) -->
+            <circle
+              cx="300"
+              cy="320"
+              r="38"
+              fill="#1e293b"
+              stroke="#ef4444"
+              stroke-width="3"
+            />
+            <circle
+              cx="300"
+              cy="320"
+              r="45"
+              fill="none"
+              stroke="#ef4444"
+              stroke-width="2"
+            />
+            <text
+              x="300"
+              y="327"
+              text-anchor="middle"
+              fill="#ef4444"
+              font-size="13"
+              font-weight="bold"
+            >
+              BLOCKED
+            </text>
+
+            <!-- Arrow 1: NORMAL → AUTH (Submit) -->
+            <line
+              x1="138"
+              y1="70"
+              x2="242"
+              y2="70"
+              stroke="#94a3b8"
+              stroke-width="2.5"
+              marker-end="url(#arrowhead)"
+            />
+            <text
+              x="190"
+              y="60"
+              text-anchor="middle"
+              fill="#94a3b8"
+              font-size="13"
+              font-weight="bold"
+            >
+              Submit
+            </text>
+
+            <!-- Arrow 2: AUTH → SUCCESS (Valid) -->
+            <line
+              x1="318"
+              y1="70"
+              x2="415"
+              y2="70"
+              stroke="#94a3b8"
+              stroke-width="2.5"
+              marker-end="url(#arrowhead)"
+            />
+            <text
+              x="367"
+              y="60"
+              text-anchor="middle"
+              fill="#94a3b8"
+              font-size="13"
+              font-weight="bold"
+            >
+              Valid
+            </text>
+
+            <!-- Arrow 3: AUTH → SUSPICIOUS (Invalid) -->
+            <line
+              x1="288"
+              y1="108"
+              x2="295"
+              y2="155"
+              stroke="#94a3b8"
+              stroke-width="2.5"
+              marker-end="url(#arrowhead)"
+            />
+            <text
+              x="330"
+              y="135"
+              text-anchor="middle"
+              fill="#94a3b8"
+              font-size="13"
+              font-weight="bold"
+            >
+              Invalid
+            </text>
+
+            <!-- Arrow 4: SUSPICIOUS → NORMAL (Failed ≥ 3) - CURVED LEFT -->
+            <path
+              d="M 260 180 Q 150 130 115 100"
+              stroke="#94a3b8"
+              stroke-width="2.5"
+              fill="none"
+              marker-end="url(#arrowhead)"
+            />
+            <text
+              x="180"
+              y="145"
+              text-anchor="middle"
+              fill="#94a3b8"
+              font-size="12"
+              font-weight="bold"
+            >
+              Failed ≥ 3
+            </text>
+
+            <!-- Arrow 5: SUSPICIOUS → SUCCESS (Valid) -->
+            <path
+              d="M 340 180 Q 400 125 438 92"
+              stroke="#94a3b8"
+              stroke-width="2.5"
+              fill="none"
+              marker-end="url(#arrowhead)"
+            />
+            <text
+              x="390"
+              y="145"
+              text-anchor="middle"
+              fill="#94a3b8"
+              font-size="13"
+              font-weight="bold"
+            >
+              Valid
+            </text>
+
+            <!-- Arrow 6: SUSPICIOUS → BLOCKED (Failed ≥ 5) -->
+            <line
+              x1="300"
+              y1="245"
+              x2="300"
+              y2="275"
+              stroke="#94a3b8"
+              stroke-width="2.5"
+              marker-end="url(#arrowhead)"
+            />
+            <text
+              x="355"
+              y="265"
+              text-anchor="middle"
+              fill="#94a3b8"
+              font-size="12"
+              font-weight="bold"
+            >
+              Failed ≥ 5
+            </text>
+
+            <!-- Arrow 7: BLOCKED → NORMAL (Timeout 300s) - LONG CURVED -->
+            <path
+              d="M 255 315 Q 100 365 85 108"
+              stroke="#94a3b8"
+              stroke-width="2.5"
+              fill="none"
+              marker-end="url(#arrowhead)"
+            />
+            <text
+              x="140"
+              y="365"
+              text-anchor="middle"
+              fill="#94a3b8"
+              font-size="12"
+              font-weight="bold"
+            >
+              Timeout (300s)
+            </text>
+          </svg>
+        </div>
+
+        <!-- FSA Steps -->
+        <div class="fsa-info">
+          <h3>📋 Penjelasan State Transition</h3>
+          <div class="fsa-steps">
+            <div class="fsa-step">
+              <span class="step-number">1</span>
+              <div class="step-content">
+                <strong>NORMAL → AUTH</strong>
+                <p>
+                  User melakukan submit credentials untuk proses autentikasi
+                </p>
+              </div>
+            </div>
+            <div class="fsa-step">
+              <span class="step-number">2</span>
+              <div class="step-content">
+                <strong>AUTH → SUCCESS</strong>
+                <p>Login berhasil jika credentials valid</p>
+              </div>
+            </div>
+            <div class="fsa-step">
+              <span class="step-number">3</span>
+              <div class="step-content">
+                <strong>AUTH → SUSPICIOUS</strong>
+                <p>Masuk ke state SUSPICIOUS jika credentials invalid</p>
+              </div>
+            </div>
+            <div class="fsa-step">
+              <span class="step-number">4</span>
+              <div class="step-content">
+                <strong>SUSPICIOUS → NORMAL</strong>
+                <p>
+                  Kembali ke NORMAL jika gagal ≥ 3 kali tetapi belum mencapai 5
+                </p>
+              </div>
+            </div>
+            <div class="fsa-step">
+              <span class="step-number">5</span>
+              <div class="step-content">
+                <strong>SUSPICIOUS → SUCCESS</strong>
+                <p>
+                  Dari SUSPICIOUS bisa langsung ke SUCCESS jika credentials
+                  valid
+                </p>
+              </div>
+            </div>
+            <div class="fsa-step">
+              <span class="step-number">6</span>
+              <div class="step-content">
+                <strong>SUSPICIOUS → BLOCKED</strong>
+                <p>Diblokir jika total percobaan gagal mencapai ≥ 5 kali</p>
+              </div>
+            </div>
+            <div class="fsa-step">
+              <span class="step-number">7</span>
+              <div class="step-content">
+                <strong>BLOCKED → NORMAL</strong>
+                <p>Kembali ke NORMAL setelah timeout 300 detik (5 menit)</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+  </body>
+</html>

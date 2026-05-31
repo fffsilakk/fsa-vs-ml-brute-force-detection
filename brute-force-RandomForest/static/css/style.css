@@ -1,0 +1,762 @@
+/* ==========================================================================
+   RANDOM FOREST BRUTE FORCE DETECTION SYSTEM - SECURITY APPLICATION
+   Complete CSS Style Sheet - Ensemble Machine Learning Version
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   01. GLOBAL STYLES & RESET 
+   -------------------------------------------------------------------------- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(
+    135deg,
+    #1e3a8a 0%,
+    #0f172a 100%
+  ); /* Gradien Biru Safir Malam ke Gelap */
+  color: #f1f5f9;
+  line-height: 1.6;
+}
+
+/* --------------------------------------------------------------------------
+   02. LOGIN PAGE - TWO COLUMN GRID LAYOUT
+   -------------------------------------------------------------------------- */
+.login-body {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.login-grid-container {
+  display: grid;
+  grid-template-columns: 2fr 3fr;
+  gap: 20px;
+  max-width: 1300px;
+  width: 100%;
+  max-height: 90vh;
+}
+
+/* Kolom Kiri - Form & Credentials */
+.login-left {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.login-section {
+  background: #1e293b;
+  padding: 25px;
+  border-radius: 12px;
+  border: 1px solid rgba(59, 130, 246, 0.2); /* Border ber-aksen biru samar */
+  flex: 1;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+.demo-section {
+  background: #1e293b;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+/* Kolom Kanan - Interaktif Model */
+.diagram-section {
+  background: #1e293b;
+  padding: 25px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  overflow-y: auto;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+/* Custom Scrollbar untuk Diagram Random Forest */
+.diagram-section::-webkit-scrollbar {
+  width: 8px;
+}
+
+.diagram-section::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+}
+
+.diagram-section::-webkit-scrollbar-thumb {
+  background: #3b82f6; /* Scrollbar Biru */
+  border-radius: 4px;
+}
+
+/* Header Form */
+.login-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.icon-shield {
+  font-size: 50px;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.login-header h1 {
+  font-size: 22px;
+  color: #60a5fa; /* Judul Biru Cerah */
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.subtitle {
+  color: #94a3b8;
+  font-size: 14px;
+}
+
+/* --------------------------------------------------------------------------
+   03. STATE INDICATOR (STATUS BADGES)
+   -------------------------------------------------------------------------- */
+.state-indicator {
+  background: #0f172a;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+.indicator-label {
+  font-size: 11px;
+  color: #94a3b8;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: bold;
+}
+
+.state-info {
+  display: flex;
+  gap: 8px;
+}
+
+.state-badge {
+  flex: 1;
+  padding: 10px 5px;
+  background: #1e293b;
+  border: 2px solid #334155;
+  border-radius: 6px;
+  text-align: center;
+  font-size: 11px;
+  color: #64748b;
+  font-weight: 600;
+  transition: all 0.3s;
+}
+
+.badge-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  margin-right: 4px;
+  opacity: 0.5;
+}
+
+.state-badge.active {
+  border-color: currentColor;
+  background: rgba(255, 255, 255, 0.08);
+  transform: scale(1.03);
+}
+
+.state-badge.active .badge-dot {
+  opacity: 1;
+  animation: blink 2s infinite;
+}
+
+.state-badge.state-normal.active {
+  color: #10b981;
+  border-color: #10b981;
+}
+
+.state-badge.state-suspicious.active {
+  color: #f59e0b;
+  border-color: #f59e0b;
+}
+
+.state-badge.state-blocked.active {
+  color: #ef4444;
+  border-color: #ef4444;
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
+/* Alert Boxes */
+.alert {
+  padding: 12px 15px;
+  border-radius: 6px;
+  margin-bottom: 15px;
+  font-size: 13px;
+  border: 1px solid;
+}
+
+.alert-error {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: #ef4444;
+  color: #fca5a5;
+}
+
+.alert-suspicious {
+  background: rgba(245, 158, 11, 0.1);
+  border-color: #f59e0b;
+  color: #fcd34d;
+}
+
+.alert-success {
+  background: rgba(16, 185, 129, 0.1);
+  border-color: #10b981;
+  color: #6ee7b7;
+}
+
+/* Form Inputs & Button */
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.input-icon input {
+  width: 100%;
+  padding: 12px 15px;
+  background: #0f172a;
+  border: 2px solid #334155;
+  border-radius: 6px;
+  color: #f1f5f9;
+  font-size: 14px;
+  transition: border-color 0.3s;
+}
+
+.input-icon input:focus {
+  outline: none;
+  border-color: #3b82f6; /* Focus warna Biru */
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.input-icon input::placeholder {
+  color: #64748b;
+}
+
+.btn-login {
+  width: 100%;
+  padding: 13px;
+  background: linear-gradient(
+    135deg,
+    #3b82f6,
+    #1d4ed8
+  ); /* Gradasi Tombol Biru */
+  border: none;
+  border-radius: 6px;
+  color: white;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.btn-login:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+}
+
+/* Demo Credentials Info */
+.demo-info {
+  background: rgba(59, 130, 246, 0.05);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  padding: 15px;
+  border-radius: 8px;
+}
+
+.demo-title {
+  font-size: 12px;
+  color: #60a5fa;
+  margin-bottom: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.credential-item {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 8px;
+  font-size: 13px;
+  align-items: center;
+}
+
+.credential-label {
+  color: #94a3b8;
+  min-width: 75px;
+  font-weight: 500;
+}
+
+.credential-item code {
+  background: #0f172a;
+  padding: 4px 12px;
+  border-radius: 4px;
+  color: #60a5fa;
+  font-family: "Courier New", monospace;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* --------------------------------------------------------------------------
+   04. MACHINE LEARNING MODEL DIAGRAM VISUAL
+   -------------------------------------------------------------------------- */
+.fsa-diagram {
+  background: #0f172a;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  text-align: center;
+  border: 1px solid #334155;
+}
+
+.fsa-diagram h3 {
+  margin-bottom: 20px;
+  font-size: 16px;
+  color: #f1f5f9;
+  font-weight: bold;
+}
+
+.diagram-svg {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+/* Model Classification Step Layout */
+.fsa-info {
+  background: #0f172a;
+  padding: 18px;
+  border-radius: 10px;
+  border: 1px solid #334155;
+}
+
+.fsa-info h3 {
+  margin-bottom: 15px;
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.fsa-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.fsa-step {
+  display: flex;
+  gap: 12px;
+  padding: 10px;
+  background: #1e293b;
+  border-radius: 6px;
+  align-items: flex-start;
+  transition: all 0.2s;
+}
+
+.fsa-step:hover {
+  background: #1e3a8a;
+  transform: translateX(3px);
+}
+
+.step-number {
+  width: 26px;
+  height: 26px;
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8); /* Bullet biru */
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 13px;
+  flex-shrink: 0;
+  color: white;
+}
+
+.step-content {
+  flex: 1;
+}
+
+.step-content strong {
+  display: block;
+  font-size: 13px;
+  margin-bottom: 3px;
+  color: #f1f5f9;
+}
+
+.step-content p {
+  font-size: 12px;
+  color: #94a3b8;
+  line-height: 1.5;
+}
+
+/* --------------------------------------------------------------------------
+   05. DASHBOARD MAIN INTERFACE
+   -------------------------------------------------------------------------- */
+.dashboard-body {
+  padding: 20px;
+}
+
+.dashboard-container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.dashboard-header {
+  background: #1e293b;
+  padding: 20px 25px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.header-content h1 {
+  font-size: 24px;
+  color: #3b82f6; /* Judul biru dashboard */
+  margin-bottom: 3px;
+  font-weight: bold;
+}
+
+.welcome-text {
+  color: #94a3b8;
+  font-size: 14px;
+}
+
+.btn-logout {
+  padding: 10px 22px;
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  border: none;
+  border-radius: 6px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.3s;
+  display: inline-block;
+}
+
+.btn-logout:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+}
+
+/* Grid Parameter Stats Kartu */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  margin-bottom: 20px;
+}
+
+.stat-card {
+  background: #1e293b;
+  padding: 22px;
+  border-radius: 12px;
+  border: 1px solid rgba(59, 130, 246, 0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s;
+}
+
+.stat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+}
+
+.stat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.stat-label {
+  font-size: 11px;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: bold;
+}
+
+.stat-icon {
+  font-size: 24px;
+  opacity: 0.6;
+}
+
+.stat-value {
+  font-size: 36px;
+  font-weight: bold;
+  color: #3b82f6; /* Angka parameter biru */
+  line-height: 1;
+}
+
+/* Log Datatables */
+.logs-section {
+  background: #1e293b;
+  padding: 22px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.logs-section h2 {
+  margin-bottom: 18px;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.table-container {
+  overflow-x: auto;
+  max-height: 450px;
+  overflow-y: auto;
+  border-radius: 8px;
+}
+
+.table-container::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.table-container::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+}
+
+.table-container::-webkit-scrollbar-thumb {
+  background: #3b82f6;
+  border-radius: 4px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead {
+  position: sticky;
+  top: 0;
+  background: #0f172a;
+  z-index: 10;
+}
+
+th,
+td {
+  padding: 13px 15px;
+  text-align: left;
+  border-bottom: 1px solid #334155;
+}
+
+th {
+  color: #94a3b8;
+  font-size: 11px;
+  text-transform: uppercase;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+td {
+  font-size: 13px;
+  color: #f1f5f9;
+}
+
+tbody tr {
+  transition: background 0.2s;
+}
+
+tbody tr:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.status-success {
+  color: #10b981;
+  font-weight: bold;
+}
+
+.status-failed {
+  color: #ef4444;
+  font-weight: bold;
+}
+
+.state-label {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.state-label.normal {
+  background: rgba(16, 185, 129, 0.2);
+  color: #10b981;
+  border: 1px solid #10b981;
+}
+
+.state-label.suspicious {
+  background: rgba(245, 158, 11, 0.2);
+  color: #f59e0b;
+  border: 1px solid #f59e0b;
+}
+
+.state-label.blocked {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+  border: 1px solid #ef4444;
+}
+
+/* --------------------------------------------------------------------------
+   06. BLOCKED SYSTEM BOX PAGE
+   -------------------------------------------------------------------------- */
+body:not(.dashboard-body):not(.login-body) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.container {
+  max-width: 550px;
+  width: 100%;
+}
+
+.blocked-box {
+  background: #1e293b;
+  padding: 40px 35px;
+  border-radius: 12px;
+  text-align: center;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  box-shadow: 0 10px 40px rgba(239, 68, 68, 0.2);
+}
+
+.blocked-icon {
+  font-size: 80px;
+  margin-bottom: 20px;
+  animation: shake 0.5s;
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-10px);
+  }
+  75% {
+    transform: translateX(10px);
+  }
+}
+
+.blocked-box h1 {
+  font-size: 28px;
+  color: #ef4444;
+  margin-bottom: 15px;
+  font-weight: bold;
+}
+
+.blocked-message {
+  color: #94a3b8;
+  margin-bottom: 20px;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.countdown {
+  background: rgba(239, 68, 68, 0.1);
+  border: 2px solid rgba(239, 68, 68, 0.3);
+  padding: 25px;
+  border-radius: 10px;
+  margin: 25px 0;
+}
+
+#countdownTimer {
+  font-size: 52px;
+  color: #ef4444;
+  font-weight: bold;
+  font-family: "Courier New", monospace;
+  letter-spacing: 3px;
+}
+
+.btn-back {
+  display: inline-block;
+  padding: 13px 28px;
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8); /* Tombol balik biru */
+  color: white;
+  text-decoration: none;
+  border-radius: 6px;
+  margin-top: 20px;
+  font-weight: bold;
+  transition: all 0.3s;
+}
+
+.btn-back:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+}
+
+/* --------------------------------------------------------------------------
+   07. MEDIA QUERIES (RESPONSIVE VIEWPORT LAYOUT)
+   -------------------------------------------------------------------------- */
+@media (max-width: 1024px) {
+  .login-grid-container {
+    grid-template-columns: 1fr;
+  }
+
+  .diagram-section {
+    max-height: 600px;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-header {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+  }
+
+  .table-container {
+    max-height: 400px;
+  }
+
+  th,
+  td {
+    padding: 10px 8px;
+    font-size: 11px;
+  }
+}
